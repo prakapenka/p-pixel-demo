@@ -1,0 +1,39 @@
+package localhost.ppixeldemo.features.users.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.Set;
+
+@Table(name = "\"USER\"")
+@Entity
+@Getter
+@NoArgsConstructor
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank(message = "Name is required")
+    @Size(max = 500, message = "Name must be at most 500 characters")
+    private String name;
+
+    @NotBlank(message = "Password is required")
+    @Size(min=8, max = 500, message = "Name must be at most 500 characters")
+    private String password;
+
+    private LocalDate dateOfBirth;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<EmailData> emails;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PhoneData> phones;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false)
+    private Account account;
+}
