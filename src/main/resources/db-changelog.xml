@@ -11,8 +11,7 @@
     <changeSet id="2" author="prakapenka">
         <loadData
                 file="./database/1-users.csv"
-                tableName="USER"
-                separator=",">
+                tableName="USER">
             <column name="name" type="STRING"/>
             <column name="date_of_birth" type="DATE"/>
             <column name="password" type="STRING"/>
