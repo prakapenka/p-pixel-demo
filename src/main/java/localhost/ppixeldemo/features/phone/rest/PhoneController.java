@@ -11,25 +11,24 @@ import localhost.ppixeldemo.common.validation.PPixelPhone;
 import localhost.ppixeldemo.features.phone.dto.UpdatePhoneRequestDTO;
 import localhost.ppixeldemo.features.phone.service.PhoneService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "User", description = "User phones operations")
 @SecurityRequirement(name = PPIXEL_SEC)
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(
-    value = "/api/user/phone",
-    consumes = MediaType.APPLICATION_JSON_VALUE,
-    produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/user/phone")
 public class PhoneController {
 
   private final PhoneService service;
 
   @Operation(description = "create new phone for user. Phone must be unique and valid")
   @PutMapping
-  public ResponseEntity<Object> createPhone(@PPixelPhone String phone) {
+  public ResponseEntity<Object> createPhone(
+      @RequestParam(name = "phone") @PPixelPhone String phone, Authentication authentication) {
+    service.createPhoneForUser(authentication.getName(), phone);
     return ResponseEntity.ok().build();
   }
 

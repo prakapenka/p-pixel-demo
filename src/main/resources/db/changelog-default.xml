@@ -14,4 +14,8 @@
     <changeSet id="2" author="prakapenka">
         <sqlFile path="classpath:db/default/1-fixes.sql" />
     </changeSet>
+    <changeSet id="3" author="prakapenka">
+        <sqlFile path="classpath:db/default/2-fixes.sql" />
+    </changeSet>
+
 </databaseChangeLog>
