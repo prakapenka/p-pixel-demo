@@ -5,16 +5,8 @@
         xsi:schemaLocation="
        http://www.liquibase.org/xml/ns/dbchangelog
        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
     <changeSet id="1" author="prakapenka">
-        <sqlFile path="./database/0-init.sql" relativeToChangelogFile="true" />
-    </changeSet>
-    <changeSet id="2" author="prakapenka">
-        <loadData
-                file="./database/1-users.csv"
-                tableName="USER">
-            <column name="name" type="STRING"/>
-            <column name="date_of_birth" type="DATE"/>
-            <column name="password" type="STRING"/>
-        </loadData>
+        <sqlFile path="classpath:db/default/0-init.sql" />
     </changeSet>
 </databaseChangeLog>
