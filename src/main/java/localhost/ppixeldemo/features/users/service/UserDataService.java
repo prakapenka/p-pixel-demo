@@ -3,6 +3,7 @@ package localhost.ppixeldemo.features.users.service;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.function.Function;
+import localhost.ppixeldemo.common.dto.PagedResponse;
 import localhost.ppixeldemo.features.users.dto.UserResponseDTO;
 import localhost.ppixeldemo.features.users.entity.UserEntity;
 import localhost.ppixeldemo.features.users.repository.UserRepository;
@@ -21,13 +22,21 @@ public class UserDataService {
   private final Function<UserEntity, UserResponseDTO> mapper;
 
   @Transactional
-  public Page<UserResponseDTO> searchUsers(
+  public PagedResponse<UserResponseDTO> searchUsers(
       String name, LocalDate dateOfBirth, String email, String phone, Pageable pageable) {
     final Specification<UserEntity> spec =
         Specification.where(UserSpecification.nameLike(name))
             .and(UserSpecification.dateOfBirthAfter(dateOfBirth))
             .and(UserSpecification.hasEmail(email))
             .and(UserSpecification.hasPhone(phone));
-    return userRepository.findAll(spec, pageable).map(mapper);
+
+    Page<UserResponseDTO> page = userRepository.findAll(spec, pageable).map(mapper);
+
+    return new PagedResponse<>(
+        page.getContent(),
+        page.getNumber(),
+        page.getSize(),
+        page.getTotalElements(),
+        page.getTotalPages());
   }
 }

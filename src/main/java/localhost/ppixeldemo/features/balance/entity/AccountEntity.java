@@ -6,10 +6,13 @@ import localhost.ppixeldemo.common.validation.PPixelBalance;
 import localhost.ppixeldemo.features.users.entity.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@Table(name = "ACCOUNT")
 @Entity
 @Getter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class AccountEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,4 +21,6 @@ public class AccountEntity {
   @OneToOne private UserEntity user;
 
   @PPixelBalance private BigDecimal balance;
+
+  @Version private int version;
 }

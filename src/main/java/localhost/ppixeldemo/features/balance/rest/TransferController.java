@@ -1,6 +1,9 @@
 package localhost.ppixeldemo.features.balance.rest;
 
+import static localhost.ppixeldemo.config.OpenApiConfig.PPIXEL_SEC;
+
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import localhost.ppixeldemo.features.balance.dto.BalanceTransferDTO;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Balance", description = "User balance operations")
+@SecurityRequirement(name = PPIXEL_SEC)
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(
