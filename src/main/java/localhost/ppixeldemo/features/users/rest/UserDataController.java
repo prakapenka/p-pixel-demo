@@ -1,5 +1,7 @@
 package localhost.ppixeldemo.features.users.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
@@ -14,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "User", description = "User search operations")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(
@@ -24,6 +27,7 @@ public class UserDataController {
 
   private final UserDataService service;
 
+  @Operation(description = "search user by fields")
   @GetMapping("/users")
   public Page<UserResponseDTO> searchUsers(
       @RequestParam(required = false) @Size(min = 1, max = 500) String name,

@@ -1,5 +1,7 @@
 package localhost.ppixeldemo.features.email.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import localhost.ppixeldemo.common.validation.PPixelEmail;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "User", description = "User emails operations")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(
@@ -20,16 +23,19 @@ public class EmailController {
 
   private final EmailService emailService;
 
+  @Operation(description = "Create new email. Email must be valid and unique")
   @PutMapping
   public ResponseEntity<Object> createEmail(@PPixelEmail String email) {
     return ResponseEntity.ok().build();
   }
 
+  @Operation(description = "update existing email by id")
   @PostMapping
   public ResponseEntity<Object> updateEmail(@Valid UpdateEmailDTO updateEmailRequest) {
     return ResponseEntity.ok().build();
   }
 
+  @Operation(description = "delete existing email by id")
   @DeleteMapping
   public ResponseEntity<Object> deleteEmail(@NotNull Long id) {
     return ResponseEntity.ok().build();

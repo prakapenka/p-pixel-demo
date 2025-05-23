@@ -1,5 +1,7 @@
 package localhost.ppixeldemo.features.balance.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import localhost.ppixeldemo.features.balance.dto.BalanceTransferDTO;
 import localhost.ppixeldemo.features.balance.service.BalanceTransferService;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Balance", description = "User balance operations")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(
@@ -20,6 +23,7 @@ public class TransferController {
 
   private final BalanceTransferService service;
 
+  @Operation(description = "transfer amount to one of the users defined by user id")
   @PostMapping
   public ResponseEntity<Object> transferBalance(@Valid BalanceTransferDTO transferDTO) {
     service.transfer(transferDTO);

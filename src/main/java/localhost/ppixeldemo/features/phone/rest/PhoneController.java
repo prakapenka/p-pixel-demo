@@ -1,5 +1,7 @@
 package localhost.ppixeldemo.features.phone.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import localhost.ppixeldemo.common.validation.PPixelPhone;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "User", description = "User phones operations")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(
@@ -20,16 +23,19 @@ public class PhoneController {
 
   private final PhoneService service;
 
+  @Operation(description = "create new phone for user. Phone must be unique and valid")
   @PutMapping
   public ResponseEntity<Object> createPhone(@PPixelPhone String phone) {
     return ResponseEntity.ok().build();
   }
 
+  @Operation(description = "update existing phone by id")
   @PostMapping
   public ResponseEntity<Object> updatePhone(@Valid UpdatePhoneRequestDTO updatePhoneRequestDTO) {
     return ResponseEntity.ok().build();
   }
 
+  @Operation(description = "delete existing phone by id")
   @DeleteMapping
   public ResponseEntity<Object> deletePhone(@NotNull Long id) {
     return ResponseEntity.ok().build();

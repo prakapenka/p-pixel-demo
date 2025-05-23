@@ -1,4 +1,7 @@
 # profile dedicated for local development running docker-compose
+server:
+  address: 127.0.0.1
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/ppixel_db
