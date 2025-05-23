@@ -5,6 +5,7 @@ import localhost.ppixeldemo.common.validation.PPixelPhone;
 import localhost.ppixeldemo.features.users.entity.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "PHONE_DATA")
@@ -15,7 +16,7 @@ public class PhoneEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne private UserEntity user;
+  @Setter @ManyToOne private UserEntity user;
 
-  @PPixelPhone private String phone;
+  @Setter @PPixelPhone private String phone;
 }

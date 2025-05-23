@@ -30,10 +30,18 @@ public class UserEntity {
 
   private LocalDate dateOfBirth;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(
+      mappedBy = "user",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
+      fetch = FetchType.LAZY)
   private Set<EmailEntity> emails;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(
+      mappedBy = "user",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
+      fetch = FetchType.LAZY)
   private Set<PhoneEntity> phones;
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false)
