@@ -9,4 +9,9 @@
     <changeSet id="1" author="prakapenka">
         <sqlFile path="classpath:db/default/0-init.sql" />
     </changeSet>
+
+    <!-- fix some not obvious issues -->
+    <changeSet id="2" author="prakapenka">
+        <sqlFile path="classpath:db/default/1-fixes.sql" />
+    </changeSet>
 </databaseChangeLog>

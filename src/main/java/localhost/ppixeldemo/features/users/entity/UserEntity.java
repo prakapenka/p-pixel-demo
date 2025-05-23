@@ -11,7 +11,7 @@ import localhost.ppixeldemo.features.phone.entity.PhoneEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "\"USER\"")
+@Table(name = "\"user\"")
 @Entity
 @Getter
 @NoArgsConstructor
