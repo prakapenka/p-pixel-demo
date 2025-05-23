@@ -1,0 +1,16 @@
+# profile dedicated for local development running docker-compose
+server:
+  address: 127.0.0.1
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ppixel_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-test-query: SELECT 1
+  jpa:
+    show-sql: true
+  liquibase:
+    contexts: default,dev # first create schema from default profile, then run dev
