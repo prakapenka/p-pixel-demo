@@ -3,6 +3,7 @@ package localhost.ppixeldemo.features.atuhentication.rest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import localhost.ppixeldemo.common.jwt.PPixelJwtService;
+import localhost.ppixeldemo.common.validation.ValidNotNull;
 import localhost.ppixeldemo.features.atuhentication.dto.AuthRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class AuthController {
 
   @Operation(description = "check username password, and return token if success")
   @PostMapping("/login")
-  public ResponseEntity<String> login(@RequestBody AuthRequestDTO requestDTO) {
+  public ResponseEntity<String> login(@RequestBody @ValidNotNull AuthRequestDTO requestDTO) {
     try {
       Authentication auth =
           authManager.authenticate(

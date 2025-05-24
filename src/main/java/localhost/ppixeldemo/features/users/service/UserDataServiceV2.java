@@ -1,5 +1,7 @@
 package localhost.ppixeldemo.features.users.service;
 
+import static java.util.Collections.emptyList;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,8 @@ import localhost.ppixeldemo.common.dto.PagedResponse;
 import localhost.ppixeldemo.common.validation.impl.MinLocalDateValidator;
 import localhost.ppixeldemo.features.users.dto.UserCoreDTO;
 import localhost.ppixeldemo.features.users.dto.UserResponseDTO;
+import localhost.ppixeldemo.features.users.entity.UserEmailProjection;
+import localhost.ppixeldemo.features.users.entity.UserPhoneProjection;
 import localhost.ppixeldemo.features.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,33 +29,35 @@ public class UserDataServiceV2 {
   public PagedResponse<UserResponseDTO> searchUsers(
       String name, LocalDate dateOfBirth, String email, String phone, Pageable pageable) {
 
+    // null aware for jpql queries
     name = name != null ? name : "";
     dateOfBirth = dateOfBirth != null ? dateOfBirth : MinLocalDateValidator.MIN.minusDays(1);
 
     Page<UserCoreDTO> corePage =
         userRepository.searchUsersCore(name, dateOfBirth, email, phone, pageable);
 
-    List<Long> userIds = corePage.getContent().stream().map(UserCoreDTO::id).toList();
+    final List<Long> userIds = corePage.getContent().stream().map(UserCoreDTO::id).toList();
 
     if (userIds.isEmpty()) {
-      return new PagedResponse<>(List.of(), pageable.getPageNumber(), pageable.getPageSize(), 0, 0);
+      return new PagedResponse<>(
+          emptyList(), pageable.getPageNumber(), pageable.getPageSize(), 0, 0);
     }
 
-    Map<Long, List<String>> emails =
+    final Map<Long, List<String>> emails =
         userRepository.findEmailsByUserIds(userIds).stream()
             .collect(
                 Collectors.groupingBy(
-                    row -> (Long) row[0],
-                    Collectors.mapping(row -> (String) row[1], Collectors.toList())));
+                    UserEmailProjection::getUserId,
+                    Collectors.mapping(UserEmailProjection::getEmail, Collectors.toList())));
 
-    Map<Long, List<String>> phones =
+    final Map<Long, List<String>> phones =
         userRepository.findPhonesByUserIds(userIds).stream()
             .collect(
                 Collectors.groupingBy(
-                    row -> (Long) row[0],
-                    Collectors.mapping(row -> (String) row[1], Collectors.toList())));
+                    UserPhoneProjection::getUserId,
+                    Collectors.mapping(UserPhoneProjection::getPhone, Collectors.toList())));
 
-    List<UserResponseDTO> dtos =
+    final List<UserResponseDTO> dtos =
         corePage.getContent().stream()
             .map(
                 core ->
@@ -64,7 +70,7 @@ public class UserDataServiceV2 {
                         core.balance()))
             .toList();
 
-    return new PagedResponse<UserResponseDTO>(
+    return new PagedResponse<>(
         dtos,
         pageable.getPageNumber(),
         pageable.getPageSize(),

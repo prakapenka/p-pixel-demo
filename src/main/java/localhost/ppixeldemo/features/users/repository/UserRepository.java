@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import localhost.ppixeldemo.features.atuhentication.entity.AuthProjection;
 import localhost.ppixeldemo.features.users.dto.UserCoreDTO;
+import localhost.ppixeldemo.features.users.entity.UserEmailProjection;
 import localhost.ppixeldemo.features.users.entity.UserEntity;
-import localhost.ppixeldemo.features.users.exception.UserNotFoundByNameException;
+import localhost.ppixeldemo.features.users.entity.UserPhoneProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,18 +39,15 @@ public interface UserRepository
       @Param("phone") String phone,
       Pageable pageable);
 
-  @Query("SELECT e.user.id, e.email FROM EmailEntity e WHERE e.user.id IN :userIds")
-  List<Object[]> findEmailsByUserIds(@Param("userIds") List<Long> userIds);
+  @Query("SELECT e.user.id as userId, e.email as email FROM EmailEntity e WHERE e.user.id IN :userIds")
+  List<UserEmailProjection> findEmailsByUserIds(@Param("userIds") List<Long> userIds);
 
-  @Query("SELECT p.user.id, p.phone FROM PhoneEntity p WHERE p.user.id IN :userIds")
-  List<Object[]> findPhonesByUserIds(@Param("userIds") List<Long> userIds);
+  @Query("SELECT p.user.id as userId, p.phone as phone FROM PhoneEntity p WHERE p.user.id IN :userIds")
+  List<UserPhoneProjection> findPhonesByUserIds(@Param("userIds") List<Long> userIds);
 
   @Query("SELECT u.name AS name, u.password AS password FROM UserEntity u WHERE u.name = :name")
   Optional<AuthProjection> findAuthProjectionByName(@Param("name") String name);
 
-  default UserEntity findUserByName(String name) {
-    return findByName(name).orElseThrow(UserNotFoundByNameException::new);
-  }
-
-  Optional<UserEntity> findByName(String name);
+  @Query("SELECT u.id FROM UserEntity u WHERE u.name = :name")
+  Optional<Long> findIdByName(String name);
 }

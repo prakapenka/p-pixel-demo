@@ -7,9 +7,10 @@
        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
     <changeSet id="dev-1" author="prakapenka" context="dev">
+        <!-- god-damned "user" name for a table! -->
         <loadData
                 file="classpath:db/dev/1-users.csv"
-                tableName="USER">
+                tableName="user">
             <column name="name" type="STRING"/>
             <column name="date_of_birth" type="DATE"/>
             <column name="password" type="STRING"/>
@@ -18,21 +19,21 @@
             -- Insert emails
             INSERT INTO EMAIL_DATA (user_id, email)
             SELECT id, LOWER(name) || '-' || id || '@example.com'
-            FROM "USER";
+            FROM "user";
 
             -- Insert phone numbers (format: 79XXXXXXXXX)
             INSERT INTO PHONE_DATA (user_id, phone)
             SELECT
                 id,
                 '79' || FLOOR(RANDOM() * 1000000000)::TEXT -- random generates from 0 to 1, i.e. min case will be 790
-            FROM "USER";
+            FROM "user";
 
             -- Insert accounts with random balance between 0 and 1000
             INSERT INTO ACCOUNT (user_id, balance)
             SELECT
                 id,
                 ROUND((RANDOM() * 1000)::numeric, 2) -- convert to ,XX precision
-            FROM "USER";
+            FROM "user";
         </sql>
     </changeSet>
 

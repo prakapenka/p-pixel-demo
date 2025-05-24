@@ -15,7 +15,7 @@ public class EmailEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne private UserEntity user;
+  @ManyToOne(fetch = FetchType.LAZY) private UserEntity user;
 
   @PPixelEmail private String email;
 }

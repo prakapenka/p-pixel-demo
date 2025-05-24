@@ -6,6 +6,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+import jakarta.validation.ReportAsSingleViolation;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -21,6 +22,7 @@ import java.lang.annotation.Target;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, PARAMETER})
 @Retention(RUNTIME)
 @Documented
+@ReportAsSingleViolation // will show just one message
 @Constraint(validatedBy = {})
 public @interface PPixelBalance {
   String message() default "Balance should be positive and at most 9999999999999.99";
