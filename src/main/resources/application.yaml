@@ -1,6 +1,8 @@
 spring:
   application:
     name: ppixel-demo
+  jpa:
+    open-in-view: false
 
   # data source is not set. Please refer dev profile for local usage
   liquibase:

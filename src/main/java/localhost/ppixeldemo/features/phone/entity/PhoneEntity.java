@@ -16,7 +16,9 @@ public class PhoneEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Setter @ManyToOne private UserEntity user;
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  private UserEntity user;
 
   @Setter @PPixelPhone private String phone;
 }
