@@ -4,29 +4,27 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/ppixel_db
+    url: jdbc:postgresql://localhost:5432/ppixel_db?reWriteBatchedInserts=true
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
     hikari:
       connection-test-query: SELECT 1
   jpa:
-    show-sql: false
+    show-sql: true
     properties:
-      hibernate:
-        format_sql: true
+      hibernate.format_sql: true
   liquibase:
     contexts: default,dev # first create schema from the default profile, then run dev
     parameters:
       liquibase.quotedIdentifiers: true # god-damned table namer user !!!
     driver-class-name: org.postgresql.Driver
 
-  logging:
-    level:
-      org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+logging:
+  level:
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+    org.hibernate.persister.entity: DEBUG
+    org.hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
 
-      org.springframework.security: TRACE
-
-      org.hibernate.SQL: DEBUG
-      org.hibernate.type.descriptor.sql: TRACE
-      org.hibernate.persister.entity: DEBUG

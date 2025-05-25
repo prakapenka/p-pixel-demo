@@ -23,5 +23,8 @@
     <changeSet id="5" author="prakapenka">
         <sqlFile path="classpath:db/default/4-init-balance-tables.sql" />
     </changeSet>
+    <changeSet id="6" author="prakapenka">
+        <sqlFile path="classpath:db/default/5-fixes.sql" />
+    </changeSet>
 
 </databaseChangeLog>

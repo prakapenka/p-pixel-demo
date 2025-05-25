@@ -16,9 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UserEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @Id private Long id;
 
   @NotBlank(message = "Name is required")
   @Size(max = 500, message = "Name must be at most 500 characters")

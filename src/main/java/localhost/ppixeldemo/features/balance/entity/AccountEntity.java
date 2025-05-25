@@ -15,11 +15,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class AccountEntity {
+
+  // specifically for batch updates
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_id_seq")
+  @SequenceGenerator(name = "account_id_seq", sequenceName = "account_id_seq")
   private Long id;
 
-  @OneToOne private UserEntity user;
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private UserEntity user;
 
   @Setter @PPixelBalance private BigDecimal balance;
 
