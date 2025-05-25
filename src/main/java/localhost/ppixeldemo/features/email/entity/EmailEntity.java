@@ -13,7 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class EmailEntity {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "email_id_seq")
+  @SequenceGenerator(name = "email_id_seq", sequenceName = "email_id_seq")
   private Long id;
 
   @Setter

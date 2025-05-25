@@ -16,7 +16,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UserEntity {
-  @Id private Long id;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
+  @SequenceGenerator(name = "user_id_seq", sequenceName = "user_id_seq")
+  private Long id;
 
   @NotBlank(message = "Name is required")
   @Size(max = 500, message = "Name must be at most 500 characters")
