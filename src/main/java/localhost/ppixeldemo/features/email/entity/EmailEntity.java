@@ -21,4 +21,6 @@ public class EmailEntity {
   private UserEntity user;
 
   @Setter @PPixelEmail private String email;
+
+  @Version private int version;
 }

@@ -1,4 +1,4 @@
-package localhost.ppixeldemo.features.atuhentication.common;
+package localhost.ppixeldemo.features.users.common;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class UserEntityReferenceResolver implements Function<Authentication, UserEntity> {
+public class AuthenticationToUserRefResolver implements Function<Authentication, UserEntity> {
 
   private final UserRepository repository;
   private final EntityManager entityManager;

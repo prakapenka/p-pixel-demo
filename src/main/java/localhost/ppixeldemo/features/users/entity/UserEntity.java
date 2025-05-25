@@ -46,4 +46,6 @@ public class UserEntity {
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false)
   private AccountEntity account;
+
+  @Version private int version;
 }
