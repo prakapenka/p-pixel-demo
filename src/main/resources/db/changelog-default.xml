@@ -26,5 +26,8 @@
     <changeSet id="6" author="prakapenka">
         <sqlFile path="classpath:db/default/5-fixes.sql" />
     </changeSet>
+    <changeSet id="7" author="prakapenka">
+        <sqlFile path="classpath:db/default/6-fixes.sql" />
+    </changeSet>
 
 </databaseChangeLog>

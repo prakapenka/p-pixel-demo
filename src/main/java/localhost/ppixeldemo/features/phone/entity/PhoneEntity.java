@@ -13,7 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PhoneEntity {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "phone_id_seq")
+  @SequenceGenerator(name = "phone_id_seq", sequenceName = "phone_id_seq")
   private Long id;
 
   @Setter
