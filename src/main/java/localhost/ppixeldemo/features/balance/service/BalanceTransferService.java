@@ -41,8 +41,11 @@ public class BalanceTransferService {
             .orElseThrow(() -> new EntityNotFoundException("Receiver account not found"));
 
     if (fromAccount.getBalance().compareTo(amount) < 0) {
-      log.warn("Unable to transfer balance from [{}], actual balance: [{}], attempt to transfer: [{}]",
-              from.getId(), fromAccount.getBalance(), amount);
+      log.warn(
+          "Unable to transfer balance from [{}], actual balance: [{}], attempt to transfer: [{}]",
+          from.getId(),
+          fromAccount.getBalance(),
+          amount);
       throw new BalanceTransferRejectedException();
     }
 

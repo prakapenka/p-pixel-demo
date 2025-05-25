@@ -1,11 +1,15 @@
 # PPixel deme server
 
+This is example of simple spring boot service, that was created as a result of task described [here (RU)](./TASK_RU.md).
 
-Swagger available at http://localhost:8080/swagger-ui/index.html
+To run server: 
+ - access to internet required (resolve dependencies while building)
+ - docker must be installed with docker-compose
+
+Swagger available at a [link](http://localhost:8080/swagger-ui/index.html) when server is running.
 
 
-
-### ⚠️ Using `"user"` as a Table Name: Common Pitfalls Across Tools
+#### ⚠️ Why not to use reserved sql word `"user"` as a Table Name:
 
 | Layer / Tool                | What Goes Wrong                                                                 | Fix / Workaround                                                                                  |
 |----------------------------|----------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|

@@ -11,12 +11,12 @@ spring:
     hikari:
       connection-test-query: SELECT 1
   jpa:
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
   liquibase:
-    contexts: default,dev # first create schema from default profile, then run dev
+    contexts: default,dev # first create schema from the default profile, then run dev
     parameters:
       liquibase.quotedIdentifiers: true # god-damned table namer user !!!
     driver-class-name: org.postgresql.Driver
