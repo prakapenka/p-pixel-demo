@@ -39,10 +39,12 @@ public interface UserRepository
       @Param("phone") String phone,
       Pageable pageable);
 
-  @Query("SELECT e.user.id as userId, e.email as email FROM EmailEntity e WHERE e.user.id IN :userIds")
+  @Query(
+      "SELECT e.user.id as userId, e.email as email FROM EmailEntity e WHERE e.user.id IN :userIds")
   List<UserEmailProjection> findEmailsByUserIds(@Param("userIds") List<Long> userIds);
 
-  @Query("SELECT p.user.id as userId, p.phone as phone FROM PhoneEntity p WHERE p.user.id IN :userIds")
+  @Query(
+      "SELECT p.user.id as userId, p.phone as phone FROM PhoneEntity p WHERE p.user.id IN :userIds")
   List<UserPhoneProjection> findPhonesByUserIds(@Param("userIds") List<Long> userIds);
 
   @Query("SELECT u.name AS name, u.password AS password FROM UserEntity u WHERE u.name = :name")

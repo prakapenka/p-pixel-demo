@@ -21,4 +21,6 @@ public class PhoneEntity {
   private UserEntity user;
 
   @Setter @PPixelPhone private String phone;
+
+  @Version private int version;
 }

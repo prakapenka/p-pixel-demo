@@ -5,6 +5,7 @@ import localhost.ppixeldemo.common.validation.PPixelEmail;
 import localhost.ppixeldemo.features.users.entity.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "EMAIL_DATA")
@@ -15,7 +16,11 @@ public class EmailEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY) private UserEntity user;
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  private UserEntity user;
 
-  @PPixelEmail private String email;
+  @Setter @PPixelEmail private String email;
+
+  @Version private int version;
 }

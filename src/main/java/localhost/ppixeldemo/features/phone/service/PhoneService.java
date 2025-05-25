@@ -1,7 +1,5 @@
 package localhost.ppixeldemo.features.phone.service;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import java.util.function.Function;
 import localhost.ppixeldemo.common.dto.PagedResponse;
 import localhost.ppixeldemo.features.phone.dto.PhoneResponseDTO;
@@ -41,7 +39,11 @@ public class PhoneService {
 
   @Transactional
   public void updatePhone(
-      Authentication authentication, @Valid UpdatePhoneRequestDTO updatePhoneRequestDTO) {
+      Authentication authentication, UpdatePhoneRequestDTO updatePhoneRequestDTO) {
+    if (phoneRepository.existsByPhone(updatePhoneRequestDTO.phone())) {
+      throw new PhoneIsAlreadyUsedException();
+    }
+
     final var userRef = userResolver.apply(authentication);
     final var phone =
         phoneRepository
@@ -51,7 +53,7 @@ public class PhoneService {
   }
 
   @Transactional
-  public void deletePhone(Authentication authentication, @NotNull Long id) {
+  public void deletePhone(Authentication authentication, Long id) {
     final UserEntity user = userResolver.apply(authentication);
     final int delCount = phoneRepository.deleteByIdAndUser(id, user);
     if (delCount == 0) {

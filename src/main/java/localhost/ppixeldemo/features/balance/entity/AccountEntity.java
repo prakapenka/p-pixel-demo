@@ -6,6 +6,7 @@ import localhost.ppixeldemo.common.validation.PPixelBalance;
 import localhost.ppixeldemo.features.users.entity.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Table(name = "ACCOUNT")
@@ -20,7 +21,7 @@ public class AccountEntity {
 
   @OneToOne private UserEntity user;
 
-  @PPixelBalance private BigDecimal balance;
+  @Setter @PPixelBalance private BigDecimal balance;
 
   @Version private int version;
 }
