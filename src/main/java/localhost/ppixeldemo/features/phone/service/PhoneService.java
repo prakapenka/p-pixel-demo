@@ -40,6 +40,10 @@ public class PhoneService {
   @Transactional
   public void updatePhone(
       Authentication authentication, UpdatePhoneRequestDTO updatePhoneRequestDTO) {
+    if (phoneRepository.existsByPhone(updatePhoneRequestDTO.phone())) {
+      throw new PhoneIsAlreadyUsedException();
+    }
+
     final var userRef = userResolver.apply(authentication);
     final var phone =
         phoneRepository
