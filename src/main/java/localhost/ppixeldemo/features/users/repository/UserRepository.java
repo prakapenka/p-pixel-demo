@@ -52,4 +52,7 @@ public interface UserRepository
 
   @Query("SELECT u.id FROM UserEntity u WHERE u.name = :name")
   Optional<Long> findIdByName(String name);
+
+  @Query("SELECT u.id FROM UserEntity u")
+  Page<Long> findAllUserIds(Pageable pageable);
 }

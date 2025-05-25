@@ -3,8 +3,27 @@ spring:
     name: ppixel-demo
   jpa:
     open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
+        generate_statistics: true
 
   # data source is not set. Please refer dev profile for local usage
   liquibase:
     enabled: true
     change-log: classpath:changelog.xml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
