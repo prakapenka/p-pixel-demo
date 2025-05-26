@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import localhost.ppixeldemo.features.atuhentication.entity.AuthProjection;
 import localhost.ppixeldemo.features.users.dto.UserCoreDTO;
+import localhost.ppixeldemo.features.users.entity.UserBalanceProjection;
 import localhost.ppixeldemo.features.users.entity.UserEmailProjection;
 import localhost.ppixeldemo.features.users.entity.UserEntity;
 import localhost.ppixeldemo.features.users.entity.UserPhoneProjection;
@@ -22,9 +23,8 @@ public interface UserRepository
 
   @Query(
       """
-      SELECT new localhost.ppixeldemo.features.users.dto.UserCoreDTO(u.id, u.name, u.dateOfBirth, a.balance)
+      SELECT new localhost.ppixeldemo.features.users.dto.UserCoreDTO(u.id, u.name, u.dateOfBirth)
         FROM UserEntity u
-        JOIN u.account a
         WHERE (:name = '' OR u.name LIKE CONCAT(:name, '%'))
           AND (u.dateOfBirth >= :dateOfBirth)
           AND (:email IS NULL OR EXISTS (
@@ -46,6 +46,9 @@ public interface UserRepository
   @Query(
       "SELECT p.user.id as userId, p.phone as phone FROM PhoneEntity p WHERE p.user.id IN :userIds")
   List<UserPhoneProjection> findPhonesByUserIds(@Param("userIds") List<Long> userIds);
+
+  @Query("SELECT u.id as userId, a.balance as balance FROM UserEntity u JOIN u.account a WHERE u.id IN :userIds")
+  List<UserBalanceProjection> findBalancesByUserIds(List<Long> userIds);
 
   @Query("SELECT u.name AS name, u.password AS password FROM UserEntity u WHERE u.name = :name")
   Optional<AuthProjection> findAuthProjectionByName(@Param("name") String name);

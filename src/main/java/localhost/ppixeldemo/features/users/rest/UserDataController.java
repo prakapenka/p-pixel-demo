@@ -1,9 +1,6 @@
 package localhost.ppixeldemo.features.users.rest;
 
-import static localhost.ppixeldemo.config.OpenApiConfig.PPIXEL_SEC;
-
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;

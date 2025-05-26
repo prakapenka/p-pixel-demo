@@ -11,9 +11,10 @@ spring:
     hikari:
       connection-test-query: SELECT 1
   jpa:
-    show-sql: true
+    show-sql: false
     properties:
       hibernate.format_sql: true
+      hibernate.generate_statistics: false
   liquibase:
     contexts: default,dev # first create schema from the default profile, then run dev
     parameters:
@@ -22,9 +23,9 @@ spring:
 
 logging:
   level:
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql: TRACE
-    org.hibernate.persister.entity: DEBUG
-    org.hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.SQL: INFO
+#    org.hibernate.type.descriptor.sql: TRACE
+#    org.hibernate.persister.entity: DEBUG
+#    org.hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
 

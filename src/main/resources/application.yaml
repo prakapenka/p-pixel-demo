@@ -10,9 +10,8 @@ spring:
           batch_versioned_data: true
         order_inserts: true
         order_updates: true
-        generate_statistics: true
 
-  # data source is not set. Please refer dev profile for local usage
+  # the data source is not set. Please refer dev profile for local usage
   liquibase:
     enabled: true
     change-log: classpath:changelog.xml

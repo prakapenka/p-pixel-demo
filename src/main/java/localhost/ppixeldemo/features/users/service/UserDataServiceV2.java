@@ -2,6 +2,7 @@ package localhost.ppixeldemo.features.users.service;
 
 import static java.util.Collections.emptyList;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +11,13 @@ import localhost.ppixeldemo.common.dto.PagedResponse;
 import localhost.ppixeldemo.common.validation.impl.MinLocalDateValidator;
 import localhost.ppixeldemo.features.users.dto.UserCoreDTO;
 import localhost.ppixeldemo.features.users.dto.UserResponseDTO;
+import localhost.ppixeldemo.features.users.entity.UserBalanceProjection;
 import localhost.ppixeldemo.features.users.entity.UserEmailProjection;
 import localhost.ppixeldemo.features.users.entity.UserPhoneProjection;
 import localhost.ppixeldemo.features.users.repository.UserRepository;
+import localhost.ppixeldemo.features.users.service.impl.CachingUserBalanceService;
+import localhost.ppixeldemo.features.users.service.impl.CachingUserEmailsService;
+import localhost.ppixeldemo.features.users.service.impl.CachingUserPhoneService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDataServiceV2 {
 
   private final UserRepository userRepository;
+  private final CachingUserEmailsService emailRepository;
+  private final CachingUserPhoneService phoneRepository;
+  private final CachingUserBalanceService balanceRepository;
 
   @Transactional(readOnly = true)
   public PagedResponse<UserResponseDTO> searchUsers(
@@ -44,20 +52,26 @@ public class UserDataServiceV2 {
     }
 
     final Map<Long, List<String>> emails =
-        userRepository.findEmailsByUserIds(userIds).stream()
+        emailRepository.findEmailsByUserIds(userIds).stream()
             .collect(
                 Collectors.groupingBy(
                     UserEmailProjection::getUserId,
                     Collectors.mapping(UserEmailProjection::getEmail, Collectors.toList())));
 
     final Map<Long, List<String>> phones =
-        userRepository.findPhonesByUserIds(userIds).stream()
+        phoneRepository.findPhonesByUserIds(userIds).stream()
             .collect(
                 Collectors.groupingBy(
                     UserPhoneProjection::getUserId,
                     Collectors.mapping(UserPhoneProjection::getPhone, Collectors.toList())));
 
-    final List<UserResponseDTO> dtos =
+    final Map<Long, BigDecimal> balances =
+        balanceRepository.findBalancesByUserIds(userIds).stream()
+            .collect(
+                Collectors.toMap(
+                    UserBalanceProjection::getUserId, UserBalanceProjection::getBalance));
+
+    final List<UserResponseDTO> dtoList =
         corePage.getContent().stream()
             .map(
                 core ->
@@ -67,11 +81,11 @@ public class UserDataServiceV2 {
                         core.dateOfBirth(),
                         emails.getOrDefault(core.id(), List.of()),
                         phones.getOrDefault(core.id(), List.of()),
-                        core.balance()))
+                        balances.getOrDefault(core.id(), BigDecimal.ZERO)))
             .toList();
 
     return new PagedResponse<>(
-        dtos,
+        dtoList,
         pageable.getPageNumber(),
         pageable.getPageSize(),
         corePage.getTotalElements(),

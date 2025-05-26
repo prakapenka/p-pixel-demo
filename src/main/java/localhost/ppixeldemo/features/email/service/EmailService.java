@@ -3,6 +3,7 @@ package localhost.ppixeldemo.features.email.service;
 import jakarta.validation.constraints.NotNull;
 import java.util.function.Function;
 import localhost.ppixeldemo.common.dto.PagedResponse;
+import localhost.ppixeldemo.config.cache.UserEmailChangedEvent;
 import localhost.ppixeldemo.features.email.dto.EmailResponseDTO;
 import localhost.ppixeldemo.features.email.dto.UpdateEmailDTO;
 import localhost.ppixeldemo.features.email.entity.EmailEntity;
@@ -11,6 +12,7 @@ import localhost.ppixeldemo.features.email.exception.EmailNotFoundException;
 import localhost.ppixeldemo.features.email.repository.EmailRepository;
 import localhost.ppixeldemo.features.users.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,7 @@ public class EmailService {
 
   private final Function<Authentication, UserEntity> userResolver;
   private final EmailRepository repository;
+  private final ApplicationEventPublisher publisher;
 
   @Transactional(readOnly = true)
   public PagedResponse<EmailResponseDTO> getEmails(
@@ -53,6 +56,7 @@ public class EmailService {
     newEmail.setUser(userRef);
 
     repository.save(newEmail);
+    publisher.publishEvent(new UserEmailChangedEvent(userRef.getId()));
   }
 
   @Transactional
@@ -67,6 +71,7 @@ public class EmailService {
             .findByIdAndUser(updateEmailRequest.id(), userRef)
             .orElseThrow(EmailNotFoundException::new);
     existedEmail.setEmail(updateEmailRequest.email());
+    publisher.publishEvent(new UserEmailChangedEvent(userRef.getId()));
   }
 
   @Transactional
@@ -77,5 +82,6 @@ public class EmailService {
     if (delCount == 0) {
       throw new EmailNotFoundException();
     }
+    publisher.publishEvent(new UserEmailChangedEvent(userRef.getId()));
   }
 }

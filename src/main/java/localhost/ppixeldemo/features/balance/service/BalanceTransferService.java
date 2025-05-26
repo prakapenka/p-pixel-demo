@@ -3,13 +3,16 @@ package localhost.ppixeldemo.features.balance.service;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.function.Function;
+import localhost.ppixeldemo.config.cache.UserBalancesChangedEvent;
 import localhost.ppixeldemo.features.balance.dto.BalanceTransferDTO;
 import localhost.ppixeldemo.features.balance.exception.BalanceTransferRejectedException;
 import localhost.ppixeldemo.features.balance.repository.AccountRepository;
 import localhost.ppixeldemo.features.users.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,8 @@ public class BalanceTransferService {
   private final AccountRepository accountRepository;
   private final Function<Authentication, UserEntity> userResolver;
   private final Function<Long, UserEntity> byIdResolver;
+
+  private final ApplicationEventPublisher publisher;
 
   @Transactional
   public void transfer(Authentication authentication, BalanceTransferDTO transferDTO) {
@@ -64,5 +69,7 @@ public class BalanceTransferService {
     toAccount.setBalance(newToBalance);
 
     log.info("Transferred [{}] from [{}] to [{}]", amount, from.getId(), to.getId());
+
+    publisher.publishEvent(new UserBalancesChangedEvent(List.of(from.getId(), to.getId())));
   }
 }

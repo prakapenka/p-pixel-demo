@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import localhost.ppixeldemo.config.cache.UserBalancesChangedEvent;
 import localhost.ppixeldemo.features.balance.entity.AccountEntity;
 import localhost.ppixeldemo.features.balance.entity.InitialBalanceEntity;
 import localhost.ppixeldemo.features.balance.exception.MissingInitialBalanceException;
@@ -15,6 +16,7 @@ import localhost.ppixeldemo.features.balance.repository.InitialBalanceRepository
 import localhost.ppixeldemo.features.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,6 +31,7 @@ public class IncreaseBalanceService {
   private final UserRepository userRepository;
   private final AccountRepository accountRepository;
   private final InitialBalanceRepository initialBalanceRepository;
+  private final ApplicationEventPublisher publisher;
 
   private static final BigDecimal GROWTH_RATE = BigDecimal.valueOf(1.10); // 10%
   private static final BigDecimal MAX_MULTIPLIER = BigDecimal.valueOf(2.07); // 207%
@@ -39,6 +42,10 @@ public class IncreaseBalanceService {
   public void increaseBalances() {
     int page = 0;
 
+    BigDecimal totalGiveaway = BigDecimal.ZERO;
+    List<Long> updatedUserIds = new ArrayList<>();
+
+    // iterative by pages to avoid loading all accounts into memory
     Page<Long> userIdsPage;
     do {
       userIdsPage = userRepository.findAllUserIds(PageRequest.of(page, PAGE_SIZE));
@@ -72,8 +79,6 @@ public class IncreaseBalanceService {
         toInsert.forEach(i -> initialMap.put(i.getUserId(), i));
       }
 
-      BigDecimal totalGiveaway = BigDecimal.ZERO;
-      List<Long> updatedUserIds = new ArrayList<>();
       List<AccountEntity> updatedAccounts = new ArrayList<>();
 
       for (AccountEntity account : accounts) {
@@ -110,10 +115,13 @@ public class IncreaseBalanceService {
         accountRepository.saveAll(updatedAccounts);
       }
 
-      log.info(
-          "Total giveaway: [{}], accounts increased: {}", totalGiveaway, updatedUserIds.size());
-
       page++;
     } while (userIdsPage.hasNext());
+
+    // publish events
+    updatedUserIds.forEach(
+        p -> publisher.publishEvent(new UserBalancesChangedEvent(updatedUserIds)));
+
+    log.info("Total giveaway: [{}], accounts increased: {}", totalGiveaway, updatedUserIds.size());
   }
 }
