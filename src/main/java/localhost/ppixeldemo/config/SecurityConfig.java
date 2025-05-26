@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.http.HttpMethod.GET;
+
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
@@ -33,8 +35,10 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(
-                        HttpMethod.GET, "/actuator/health/liveness", "/actuator/health/readiness")
+                        GET, "/actuator/health/liveness", "/actuator/health/readiness")
                     .permitAll())
+        // allow all searches
+            .authorizeHttpRequests(auth -> auth.requestMatchers(GET, "/api/user").permitAll())
         .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     return http.build();

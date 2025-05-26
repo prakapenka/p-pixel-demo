@@ -22,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "User", description = "User search operations")
-@SecurityRequirement(name = PPIXEL_SEC)
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/user")
