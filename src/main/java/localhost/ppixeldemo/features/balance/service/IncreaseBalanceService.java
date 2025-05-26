@@ -119,8 +119,7 @@ public class IncreaseBalanceService {
     } while (userIdsPage.hasNext());
 
     // publish events
-    updatedUserIds.forEach(
-        p -> publisher.publishEvent(new UserBalancesChangedEvent(updatedUserIds)));
+    publisher.publishEvent(new UserBalancesChangedEvent(updatedUserIds));
 
     log.info("Total giveaway: [{}], accounts increased: {}", totalGiveaway, updatedUserIds.size());
   }
