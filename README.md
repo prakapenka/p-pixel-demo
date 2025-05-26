@@ -26,6 +26,8 @@ docker-compose stop server
 
 Swagger available at a [link](http://localhost:8080/swagger-ui/index.html) when the server is running.
 
+Simple java's caffeine cache is used, see user search implementation.
+
 
 #### ⚠️ Why not to use reserved sql word `"user"` as a Table Name:
 
