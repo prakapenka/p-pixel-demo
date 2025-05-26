@@ -1,4 +1,4 @@
-# PPixel deme server
+# PPixel demo server
 
 This is an example of a simple spring boot service that was created as a result of task described [here (RU)](./TASK_RU.md).
 
