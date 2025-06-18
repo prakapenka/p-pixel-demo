@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -36,7 +38,7 @@ public class PPixelJwtFilter extends OncePerRequestFilter {
                 username, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(auth);
       } catch (Exception e) {
-        log.error("Error to set jwt authentication", e);
+        throw new AuthenticationServiceException("Error to set jwt authentication", e);
       }
     }
     chain.doFilter(request, response);
